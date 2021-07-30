@@ -21,12 +21,17 @@ class App extends Component {
     });
   }
   callLogin = () => {
-    fetch("http://localhost:3000/login", {
-      method: "post",
+    // console.log('login!');
+    fetch("http://localhost:4000/login", {
+      method: "POST",
       headers: {
         "Content-Type" : "application/json"
       },
       body: JSON.stringify({username: this.state.username, password: this.state.password})
+    })
+    .then((result) => result.json())
+    .then(data => {
+      console.log(data);
     })
   }
   render () {
