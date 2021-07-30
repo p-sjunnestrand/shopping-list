@@ -1,25 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import { Component } from 'react';
+import Field from './modules/field';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  state = {
+    username: "",
+    password: "",
+  }
+
+  onChange = e => {
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
+
+    console.log(value);
+
+    this.setState({
+      [name]: value,
+    });
+  }
+  callLogin = () => {
+    fetch("http://localhost:3000/login", {
+      method: "post",
+      headers: {
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({username: this.state.username, password: this.state.password})
+    })
+  }
+  render () {
+    return (
+      <div>
+        <h1>Login</h1>
+        <Field id="username" label="Username" onChange={this.onChange}/>
+        <Field id="password" label="Password" onChange={this.onChange}/>
+        <button onClick={this.callLogin}>Login</button>
+      </div>
+    )
+  }
 }
-
 export default App;
