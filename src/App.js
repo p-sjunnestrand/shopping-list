@@ -1,47 +1,50 @@
 import './App.css';
 import { Component } from 'react';
-import Field from './modules/field';
+import Login from './modules/loginView';
+import Main from './modules/mainView';
+import Header from './modules/header';
 
 class App extends Component {
 
   state = {
-    username: "",
-    password: "",
+    user: ""
   }
 
-  onChange = e => {
-    const target = e.target;
-    const name = target.name;
-    const value = target.value;
-
-    console.log(value);
-
-    this.setState({
-      [name]: value,
-    });
-  }
-  callLogin = () => {
-    // console.log('login!');
-    fetch("http://localhost:4000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type" : "application/json"
-      },
-      body: JSON.stringify({username: this.state.username, password: this.state.password})
+  componentDidMount() {
+    fetch('http://localhost:4000/user', {
+      method: "GET",
+      credentials: "include",
     })
-    .then((result) => result.json())
+    .then(result => result.json())
     .then(data => {
-      console.log(data);
+      console.log(data)
+      if(data.user){
+        this.setUserId(data.user.user)
+      }
     })
   }
+
+  setUserId = (id) => {
+    this.setState({user: id})
+  }
+
+  // getUser = () => {
+  //   fetch('http://localhost:4000/user', {
+  //     method: "GET",
+  //     credentials: "include",
+  //   })
+  //   .then(result => result.json())
+  //   .then(data => {
+  //     console.log(data)
+  //   })
+  // }
+
   render () {
     return (
       <div>
-        <h1>Login</h1>
-        <Field id="username" label="Username" onChange={this.onChange}/>
-        <Field id="password" label="Password" onChange={this.onChange}/>
-        <button onClick={this.callLogin}>Login</button>
-      </div>
+        <Header/>
+        {this.state.user ? <Main /> : <Login setUserId={this.setUserId} />}
+      </div> 
     )
   }
 }
