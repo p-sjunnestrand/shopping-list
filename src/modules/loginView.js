@@ -25,10 +25,38 @@ class Login extends Component {
           },
           body: JSON.stringify({username: this.state.username, password: this.state.password})
         })
-        .then((result) => result.json())
-        .then(data => {
-          console.log(data);
-          this.props.setUserId(data)
+        // .then((result) => result.json())
+        // .then(data => {
+        //   console.log(data);
+        //   this.props.setUserId(data)
+        // })
+        // .then(response => {
+        //   if(!response.ok) {
+        //     throw new Error (response)
+        //   } else {
+        //     this.props.setUserId()
+        //   }
+        // })
+        // .catch(error)
+        .then( async (response) => {
+
+          // get json response here
+          let data = await response.json();
+          
+          if(response.status === 200){
+           // Process data here
+           console.log("ok!");
+           console.log(response.status);
+           console.log(data);
+          }
+          if(response.status !== 200){
+           // Rest of status codes (400,500,303), can be handled here appropriately
+           console.log(response.status);
+          }
+  
+        })
+        .catch((err) => {
+            console.log(err);
         })
     }
 

@@ -6,7 +6,7 @@ class Field extends Component {
         return (
             <div>
                 <label htmlFor={this.props.id}>{this.props.label}</label>
-                <input id={this.props.id} name={this.props.id} onChange={this.props.onChange}/>
+                <input id={this.props.id} name={this.props.id} onChange={this.props.onChange} required={this.props.required} value={this.props.value}/>
             </div>
         )
     }
