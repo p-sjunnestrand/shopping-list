@@ -1,16 +1,18 @@
-import './App.css';
+import './css/style.css';
 import { Component } from 'react';
-import Login from './modules/loginView';
 import Main from './modules/mainView';
 import Header from './modules/header';
+import Landing from './modules/landing';
 
 class App extends Component {
 
+  //If user is set in state, they are already logged in, redirecting them directly to the logged in view.
   state = {
-    user: ""
+    user: "",
   }
 
   componentDidMount() {
+    //Calls the server asking if user is already logged in (through (de-)initialization in Passport)
     fetch('http://localhost:4000/user', {
       method: "GET",
       credentials: "include",
@@ -18,6 +20,7 @@ class App extends Component {
     .then(result => result.json())
     .then(data => {
       console.log(data)
+      //If user is initialized (i.e. already logged in) through Passport, userid is set in state.
       if(data.user){
         this.setUserId(data.user.user)
       }
@@ -28,22 +31,11 @@ class App extends Component {
     this.setState({user: id})
   }
 
-  // getUser = () => {
-  //   fetch('http://localhost:4000/user', {
-  //     method: "GET",
-  //     credentials: "include",
-  //   })
-  //   .then(result => result.json())
-  //   .then(data => {
-  //     console.log(data)
-  //   })
-  // }
-
   render () {
     return (
       <div>
-        <Header/>
-        {this.state.user ? <Main /> : <Login setUserId={this.setUserId} />}
+        <Header user={this.state.user} setUserId={this.setUserId}/>
+        {this.state.user ? <Main /> : <Landing setUserId={this.setUserId} />}
       </div> 
     )
   }

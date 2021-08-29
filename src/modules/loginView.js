@@ -3,12 +3,13 @@ import Field from "./field";
 
 class Login extends Component {
 
+    //Put in module!
     onChange = (e) => {
         const target = e.target;
         const name = target.name;
         const value = target.value;
 
-        console.log(value);
+        // console.log(value);
 
         this.setState({
         [name]: value,
@@ -23,21 +24,8 @@ class Login extends Component {
           headers: {
             "Content-Type" : "application/json"
           },
-          body: JSON.stringify({username: this.state.username, password: this.state.password})
+          body: JSON.stringify({username: this.state.loginUsername, password: this.state.loginPassword})
         })
-        // .then((result) => result.json())
-        // .then(data => {
-        //   console.log(data);
-        //   this.props.setUserId(data)
-        // })
-        // .then(response => {
-        //   if(!response.ok) {
-        //     throw new Error (response)
-        //   } else {
-        //     this.props.setUserId()
-        //   }
-        // })
-        // .catch(error)
         .then( async (response) => {
 
           // get json response here
@@ -48,6 +36,7 @@ class Login extends Component {
            console.log("ok!");
            console.log(response.status);
            console.log(data);
+           this.props.setUserId(data)
           }
           if(response.status !== 200){
            // Rest of status codes (400,500,303), can be handled here appropriately
@@ -63,10 +52,11 @@ class Login extends Component {
     render () {
         return (
             <div>
-                <h1>Logga in:</h1>
-                <Field id="username" label="Username" onChange={this.onChange}/>
-                <Field id="password" label="Password" onChange={this.onChange}/>
-                <button onClick={this.callLogin}>Login</button>
+                <h1>Välkommen!</h1>
+                <Field id="loginUsername" label="Användarnamn" onChange={this.onChange}/>
+                <Field id="loginPassword" label="Lösenord" type={"password"} onChange={this.onChange}/>
+                <button onClick={this.callLogin}>Loggga in</button>
+                <button onClick={this.props.toWelcome}>Avbryt</button>
             </div>
         )
     }

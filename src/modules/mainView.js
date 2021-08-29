@@ -24,7 +24,6 @@ class Main extends Component {
                 <AddItemView closeAddWindow={this.closeAddWindow}/> :
                 <ListView addItemScreen={this.addItemScreen}/> 
                 }           
-                
             </div>
         )
     }
