@@ -3,11 +3,7 @@ import Item from './item'
 
 class List extends Component {
 
-    // state = {
-    //     itemsLoaded : false,
-    //     items : null,
-    // }
-
+    //Fetches list items from the server.
     componentDidMount() {
         fetch('http://localhost:4000/list', {
         method: "GET",
@@ -33,6 +29,3 @@ class List extends Component {
 }
 
 export default List;
-
-// item.checked
-// this.props.state[item._id]?"checkedItem":"uncheckedItem"
