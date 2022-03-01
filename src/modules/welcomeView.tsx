@@ -1,6 +1,10 @@
 import { Component } from "react";
 
-class Welcome extends Component {
+interface Props {
+    toLogin:() => void,
+    toRegister:() => void,
+}
+class Welcome extends Component <Props>{
     render () {
         return (
             <section>

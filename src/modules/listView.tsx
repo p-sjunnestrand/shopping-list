@@ -1,85 +1,100 @@
-import { Component } from "react";
+import React from "react";
 import Menu from "./menu";
 import List from "./list"
 
-class ListView extends Component {
+interface Props {
+    addItemScreen: () => void,
+}
+interface State {
+    itemsLoaded: boolean,
+    items: object[],
+}
+interface Item {
+    _id: string,
+    name: string,
+    section: string,
+    checked: boolean,
+}
+
+class ListView extends React.Component <Props, State>{
 
     state = {
         itemsLoaded : false,
         items : [],
     }
 
-    dataLoaded = (data) => {
+    dataLoaded = (data: Item[]) => {
         //Adds a checked key to all object fetched from db. Used under clearClick.
+        const addedCheck: object = {checked: false};
         data.map(obj => {
-            return obj.checked = false;
+            console.log(typeof(obj._id));
+            
+            return {...obj, ...addedCheck}
         })
-        // console.log(data);
+        console.log("listView 32 ", data);
+        
+        
         
         //Sets items in data as state. Also changes state to signal that all items are fetched from db, which triggers a render of list items in list.js.
         this.setState({
-            items: data,
+            items: data as Item[],
             itemsLoaded: true,
-            })
+        })
     }
     //Handles click on done-button for each list item. (rename!)
-    handleClick = (e) => {
-        // console.log("click");
-        const target = e.target;
-        const parent = target.parentElement.id;
-        // console.log(parent);
-
+    checkClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const parent: string = e.target.parentElement!.id;
+        
         //Toggles between checked: false/true for each click.
-        let updatedItems = this.state.items.map(item => {
+        let updatedItems: object[] = this.state.items.map((item: Item) => {
+            
             if(item._id === parent) {
                 return {...item, checked: !item.checked}
             }
             return item;
         })
-        this.setState({...this.state, items: updatedItems})
-        // console.log(updatedItems);
-        
+        this.setState({...this.state, items: updatedItems})        
     }
 
     //Removes the checked items from the list through a fetch to server
     clearClick = () => {
-        // console.log("clear!");
         //Filters out only checked items.
-        const checkedItems = this.state.items.filter(obj => {
+        const checkedItems: Array<object> = this.state.items.filter((obj: Item) => {
             return obj.checked;
         })
+
         //Prevents fetch if state is empty.
-        if(checkedItems.length === 0){
+        if(!checkedItems.length){
             return;
         } else {
             //Grabs _id of checked items.
-            const itemIds = checkedItems.map(obj => obj._id);
-            // console.log(itemIds);
-    
+            console.log("71", checkedItems);
+            console.log("72", this.state.items);
+            
+            
+            const itemIds: string[] = checkedItems.map((obj: any): string =>  obj._id); //Vad ska jag ha för typ här!?
+            
             //Filters out unchecked items to update state with.
-            const newState = this.state.items.filter(obj => !obj.checked);
-            // console.log("newState", newState);
+            const newState: object[] = this.state.items.filter((obj: Item) => !obj.checked);
     
             this.fetchDelete(itemIds, newState);
         }
     }
     //Empties the list of items.
     emptyList = () => {
-        const itemIds = this.state.items.map(obj => obj._id);
+        const itemIds: string[] = this.state.items.map((obj: Item): string => obj._id);
         //Prevents fetch if state is empty.
         if (itemIds.length === 0) {
             return;
         } else {
-                const newState = [];
+                const newState: object[] = [];
     
                 this.fetchDelete(itemIds, newState);
-            
-            // console.log(itemIds);
         }
     }
 
     //This should probably be put in a module.
-    fetchDelete = (itemIds, newState) => {
+    fetchDelete = (itemIds: string[], newState: object[]) => {
         fetch("http://localhost:4000/delete", {
             method: "POST",
             credentials: "include",
@@ -99,7 +114,7 @@ class ListView extends Component {
     render () {
         return (
             <section id="listView">
-                <List state={this.state} dataLoaded={this.dataLoaded} handleClick={this.handleClick}/>
+                <List state={this.state} dataLoaded={this.dataLoaded} handleClick={this.checkClick}/>
                 <Menu addItemScreen={this.props.addItemScreen} listPopulated={this.state.items.length ? true : false} clearClick={this.clearClick} emptyList={this.emptyList}/>
             </section>
         )

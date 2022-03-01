@@ -1,18 +1,32 @@
-import { Component } from "react";
+import React from "react";
 import Field from "./field";
 
-class Register extends Component {
+interface Props {
+    setUserId: (id: string|number) => void,
+    toWelcome: () => void,
+}
 
-    onChange = (e) => {
-        const target = e.target;
-        const name = target.name;
-        const value = target.value;
+interface State {
+    regUsername: string|undefined,
+    regPassword: string|undefined,
+}
+class Register extends React.Component <Props, State> {
+
+    state = {
+        regUsername: undefined,
+        regPassword: undefined,
+    }
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // const target = e.target;
+        const name = e.target.name;
+        const value = e.target.value;
 
         // console.log(value);
 
-        this.setState({
-        [name]: value,
-        });
+        this.setState((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
     }
 
     register = () => {
@@ -62,9 +76,8 @@ class Register extends Component {
             <section>
                 <h1>Skapa ett nytt konto:</h1>
                 <p>Jag är ingen säkerhetsexpert, så använd inte typ ditt banklösenord...</p>
-                {/*The login username and password fields have the same ids as here. This might be a problem. */}
-                <Field id="regUsername" label="Användarnamn" required={true} onChange={this.onChange}/>
-                <Field id="regPassword" label="Lösenord" required={true} onChange={this.onChange}/>
+                <Field id="regUsername" label="Användarnamn" type="text" required={true} onChange={this.onChange}/>
+                <Field id="regPassword" label="Lösenord" type="text" required={true} onChange={this.onChange}/>
                 <button onClick={this.register}>Skapa konto</button>
                 <button onClick={this.props.toWelcome}>Avbryt</button>
             </section>

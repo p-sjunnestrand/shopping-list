@@ -1,6 +1,10 @@
 import { Component } from "react";
 
-class Section extends Component {
+interface Props {
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+}
+
+class Section extends Component <Props>{
     render () {
         return (
             <select onChange={this.props.onChange} id="sectionField">

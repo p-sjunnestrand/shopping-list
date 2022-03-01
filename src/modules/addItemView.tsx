@@ -1,10 +1,17 @@
-import { Component } from "react";
+import React from "react";
 import AddItemField from "./addItemField";
 import CloseButton from "./closeButton";
 // import Field from "./field";
 import Section from "./section";
 
-class AddItemView extends Component {
+interface Props {
+    closeAddWindow:() => void,
+}
+interface State {
+    itemField: string,
+    sectionField: string
+}
+class AddItemView extends React.Component <Props, State>{
 
     state = {
         itemField: "",
@@ -12,21 +19,21 @@ class AddItemView extends Component {
         sectionField: "",
     }
 
-    handleChange = (e) => {
+    handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>|React.ChangeEvent<HTMLSelectElement>) => {
         //denna borde sättas i en modul och importeras här och i login
-        const target = e.target;
-        const name = target.id;
-        const value = target.value;
+        const name: string = e.target.id;
+        const value: string = e.target.value;
 
         console.log(value);
         console.log(name);
 
-        this.setState({
-        [name]: value,
-        });
+        this.setState((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
     }
 
-    addItem = (e) => {
+    addItem = (e: React.FormEvent) => {
         console.log("submit!");
         e.preventDefault();
         if (this.state.sectionField === "") {
@@ -34,7 +41,7 @@ class AddItemView extends Component {
         }
         else {
 
-            const newItem = {
+            const newItem: object = {
                 item: this.state.itemField,
                 section: this.state.sectionField,
             }

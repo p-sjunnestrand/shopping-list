@@ -3,13 +3,20 @@ import Welcome from "./welcomeView";
 import Login from "./loginView";
 import Register from "./registerView";
 
-class Landing extends Component {
+interface State {
+    view: string,
+}
+interface Props {
+    setUserId: (id: number|string) => void,
+}
+
+class Landing extends Component <Props, State> {
 
     state = {
         view: "welcome"
     }
 
-    renderSwitch = (view) => {
+    renderSwitch = (view: string) => {
         switch(view) {
             case "welcome":
                 return <Welcome toLogin={this.toLogin} toRegister={this.toRegister}/>;

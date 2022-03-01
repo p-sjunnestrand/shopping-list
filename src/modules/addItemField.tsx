@@ -1,6 +1,11 @@
 import { Component } from "react";
 
-class AddItemField extends Component {
+interface Props {
+    value: string,
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void,
+}
+
+class AddItemField extends Component <Props>{
     render () {
         return (
             <div>

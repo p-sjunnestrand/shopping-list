@@ -2,10 +2,14 @@ import { Component } from "react";
 import ListView from "./listView";
 import AddItemView from "./addItemView";
 
-class Main extends Component {
+interface State {
+    addView: boolean,
+}
+
+class Main extends Component <{}, State>{
 
     state = {
-        addItemView: false,
+        addView: false,
     }
 
     addItemScreen = () => {

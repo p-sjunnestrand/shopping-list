@@ -1,22 +1,36 @@
-import { Component} from "react";
+import React from "react";
 import Field from "./field";
 
-class Login extends Component {
+interface Props {
+    setUserId: (id: number|string) => void,
+    toWelcome: () => void,
+}
+interface State {
+    loginUsername: string,
+    loginPassword: string,
+}
+class Login extends React.Component <Props, State>{
 
-    //Put in module!
-    onChange = (e) => {
-        const target = e.target;
-        const name = target.name;
-        const value = target.value;
-
-        // console.log(value);
-
-        this.setState({
-        [name]: value,
-        });
+    state = {
+        loginUsername: "",
+        loginPassword: "",
     }
 
-    callLogin = (e) => {
+    //Put in module!
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // const target = e.target;
+        const name: string = e.target.name;
+        const value: string = e.target.value;
+
+        console.log(value);
+
+        this.setState((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
+    callLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
 
         fetch("http://localhost:4000/login", {
           method: "POST",
@@ -30,6 +44,8 @@ class Login extends Component {
 
           // get json response here
           let data = await response.json();
+          console.log(data);
+          
           
           if(response.status === 200){
            // Process data here
@@ -53,8 +69,8 @@ class Login extends Component {
         return (
             <div>
                 <h1>Välkommen!</h1>
-                <Field id="loginUsername" label="Användarnamn" onChange={this.onChange}/>
-                <Field id="loginPassword" label="Lösenord" type={"password"} onChange={this.onChange}/>
+                <Field id="loginUsername" label="Användarnamn" type="text" required={false} onChange={this.onChange}/>
+                <Field id="loginPassword" label="Lösenord" type="password" required={false} onChange={this.onChange}/>
                 <button onClick={this.callLogin}>Loggga in</button>
                 <button onClick={this.props.toWelcome}>Avbryt</button>
             </div>

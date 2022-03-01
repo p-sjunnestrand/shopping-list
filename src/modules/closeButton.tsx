@@ -1,6 +1,9 @@
 import { Component } from "react";
 
-class CloseButton extends Component {
+interface Props {
+    closeAddWindow: () => void,    
+}
+class CloseButton extends Component <Props>{
     render () {
         return (
             <button type="button" onClick={this.props.closeAddWindow}>Stäng</button>
